@@ -117,12 +117,12 @@ void searchInRecordByEmail(string email)
 int main()
 {
   init();
-  addToRecord("gyanchand","gyan1294@gmail.com");
-  addToRecord("kewatgyanchand","gyan1294@gmail.com");
+  addToRecord("gyanchand","gyan1234@gmail.com");
+  addToRecord("kewatgyanchand","gyan1234@gmail.com");
   addToRecord("abhishek","abhishek1996@gmail.com");
 
-  searchInRecordByEmail("gyan1294@gmail.com");
-  deleteFromRecordByEmail("gyan1294@gmail.com");
-  searchInRecordByEmail("gyan1294@gmail.com");
+  searchInRecordByEmail("gyan1234@gmail.com");
+  deleteFromRecordByEmail("gyan1234@gmail.com");
+  searchInRecordByEmail("gyan1234@gmail.com");
   return 0;
 }
