@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>BubbleSort@gyan</title>
+  <style>
+      body{
+         background-color:#292826;
+      }
+      #gameBkg{
+        margin-left: 50%;
+        width:1210px;
+        transform:translateX(-605px);
+
+      }
+      #gameHeading{
+        display: block;
+        float: left;
+        height:150px;
+        width:1210px;
+        padding-bottom: 15px;
+
+
+      }
+      #gameName{
+        font-size: 80px;
+        font-family:  "Clear Sans", "Helvetica Neue", Arial, sans-serif;
+        font-weight:bold;
+        color: #776e66;
+
+      }
+
+
+
+
+
+      #gameBoard{
+        display: block;
+        float: left;
+        width: 1210px;
+        height: 210px;
+        border-radius: 8px;
+
+      }
+
+      .tileBkg{
+        display: block;
+        float: left;
+        width: 90px;
+        height: 90px;
+        margin-left: 10px;
+        margin-top: 10px;
+        border-radius: 45px;
+        background-color:#ffe6e6;
+
+
+      }
+
+      .gameTile{
+
+        width: 80px;
+        height: 80px;
+        margin-left: 5px;
+        margin-top: 5px;
+        color: white;
+        border-radius: 40px;
+        text-align: center;
+        font-family:  "Clear Sans", "Helvetica Neue", Arial, sans-serif;
+        transition: transform 0.5s ease-in-out;
+      }
+      .notEmpty{
+        background-color: #b3b300;
+      }
+
+      .tileValue{
+        text-align: center;
+        font-weight: bold;
+        padding-top: 20px;
+        font-size: 40px;
+      }
+
+      .focussedTile{
+        background-color: #ff9933;
+      }
+
+      .sorted{
+        background-color: #8585ad;
+      }
+
+      #addTile{
+        display: block;;
+        float: left;
+        width: 1210px;
+        padding-top:50px;
+        text-align: center;
+
+      }
+      .input{
+        background: #cceeff;
+        font-size: 20px;
+        width: 200px;
+        border-radius: 10px;
+        padding-left: 10px;
+      }
+      .btn{
+        background-color: #ff884d;
+        font-size: 20px;
+        width: 100px;
+        border-radius: 10px;
+      }
+
+      .disableClass{
+        opacity: 0.5;
+      }
+
+
+  </style>
+</head>
+<body>
+    <div id="gameBkg">
+        <div id="gameHeading">
+          <div id="gameName">Bubble Sort</div>
+
+        </div>
+        <div id="gameBoard">
+            <div class="tileBkg"  ><div class="gameTile" id="1" ><div class="tileValue" id="v1"></div></div></div>
+            <div class="tileBkg"  ><div class="gameTile" id="2" ><div class="tileValue" id="v2"></div></div></div>
+            <div class="tileBkg"  ><div class="gameTile" id="3" ><div class="tileValue" id="v3"></div></div></div>
+            <div class="tileBkg"  ><div class="gameTile" id="4" ><div class="tileValue" id="v4"></div></div></div>
+
+            <div class="tileBkg"  ><div class="gameTile" id="5"><div class="tileValue" id="v5"></div></div></div>
+            <div class="tileBkg"  ><div class="gameTile" id="6"><div class="tileValue" id="v6"></div></div></div>
+            <div class="tileBkg"  ><div class="gameTile" id="7"><div class="tileValue" id="v7"></div></div></div>
+            <div class="tileBkg"  ><div class="gameTile" id="8"><div class="tileValue" id="v8"></div></div></div>
+
+            <div class="tileBkg"  ><div class="gameTile" id="9"><div class="tileValue"  id="v9"></div></div></div>
+            <div class="tileBkg"  ><div class="gameTile" id="10"><div class="tileValue" id="v10"></div></div></div>
+            <div class="tileBkg"  ><div class="gameTile" id="11"><div class="tileValue" id="v11"></div></div></div>
+            <div class="tileBkg"  ><div class="gameTile" id="12"><div class="tileValue" id="v12"></div></div></div>
+
+
+
+        </div>
+
+        <div id="addTile">
+          <input type="number" id="numberToAdd" class="input" placeholder="e.g. 12">
+          <input type="button" id="addBtn" class="btn" value="Add" onclick="add()">
+          <input type="button" id="simulateBtn" class="btn" value="Simulate" onclick="simulate()">
+          <input type="button" id="resetBtn" class="btn" value="Reset" onclick="reset()">
+        </div>
+
+
+
+
+
+    </div>
+
+    <script>
+
+        var arr=new Array(15);
+        var idTable=new Array(15);
+        var tLog=new Array(500);  for(var i=0;i<500;i++)tLog[i]=new Array(5);
+        var idMovementX=new Array(15);
+        var idMovementY=new Array(15);
+
+        var logIndex;
+        var startTime;
+        var transitionTime=500;
+        var aIndex;
+
+        function translate(id,x,y)
+        {
+          document.getElementById(id).style.transform="translate("+x+"px,"+y+"px)";
+        }
+
+        function addClass(id,className)
+        {
+          document.getElementById(id).classList.add(className);
+        }
+
+        function removeClass(id , className)
+        {
+          document.getElementById(id).classList.remove(className);
+        }
+
+
+
+        function addSortedClass(id,type)
+        {
+
+          if(type==1)
+          {
+            console.log("sorted id:",id,type);
+            document.getElementById(id).classList.add("sorted");
+          }
+
+        }
+        function addTile(id,value)
+        {
+          console.log("addTile",id);
+          document.getElementById("v"+id).innerHTML=value;
+        }
+
+
+
+        function animate(id,x,y,t,type)
+        {
+          x*=100;
+          y*=100;
+
+
+          setTimeout(function(){addClass(id,"focussedTile");},t+20);
+          setTimeout(function(){translate(id,x,y)},t+20);
+          setTimeout(function(){addSortedClass(id,type)},t+20+transitionTime);
+          if(y==0)
+          {
+            setTimeout(function(){removeClass(id,"focussedTile");},t+20+transitionTime);
+          }
+
+
+        }
+
+        function insertIntoLog(id,x,y,type)
+        {
+          logIndex++;
+          tLog[logIndex][0]=id;
+
+          idMovementX[id]+=x;
+          tLog[logIndex][1]=idMovementX[id];
+
+          idMovementY[id]+=y;
+          tLog[logIndex][2]=idMovementY[id];
+
+          tLog[logIndex][3]=type;
+
+        }
+
+        function swap(i,j)
+        {
+            var temp=arr[i];
+            arr[i]=arr[j];
+            arr[j]=temp;
+
+            temp=idTable[i];
+            idTable[i]=idTable[j];
+            idTable[j]=temp;
+
+        }
+
+
+        function bubbleSort(n)
+        {
+
+            var i, j;
+            for (i = 0; i < n-1; i++)
+            {
+
+              for (j = 0; j < n-i-1; j++)
+              {
+                if (arr[j] > arr[j+1])
+                {
+                  insertIntoLog(idTable[j],0,1,0);
+                  insertIntoLog(idTable[j+1],-1,0,0);
+                  insertIntoLog(idTable[j],1,-1,0);
+                  swap(j,j+1);
+                }
+              }
+
+              insertIntoLog(idTable[n-i-1],0,0,1);
+            }
+
+        }
+
+        function add()
+        {
+          var value=document.getElementById("numberToAdd").value;
+          value=parseInt(value);
+          setAndAnimate(value);
+        }
+
+
+        function setAndAnimate(value)
+        {
+          aIndex++;
+          console.log("setAndAnimate:",aIndex);
+          if(aIndex>12)return;
+
+          arr[aIndex]=value;
+          addTile(aIndex,value);
+          addClass(aIndex,"notEmpty");
+        }
+
+        function init()
+        {
+
+          aIndex=0;
+
+          for(var i=1;i<13;i++)
+          {
+            idTable[i]=i;
+            idMovementX[i]=0;
+            idMovementY[i]=0;
+
+          }
+
+          setAndAnimate(13);
+          setAndAnimate(4);
+          simulate();
+
+        }
+
+        function enable()
+        {
+          document.getElementById("numberToAdd").style.pointerEvents="initial";
+          removeClass("numberToAdd","disableClass");
+          document.getElementById("addBtn").style.pointerEvents="initial";
+          removeClass("addBtn","disableClass");
+          document.getElementById("simulateBtn").style.pointerEvents="initial";
+          removeClass("simulateBtn","disableClass");
+          document.getElementById("resetBtn").style.pointerEvents="initial";
+          removeClass("resetBtn","disableClass");
+        }
+
+        function disable()
+        {
+          document.getElementById("numberToAdd").style.pointerEvents="none";
+          addClass("numberToAdd","disableClass");
+          document.getElementById("addBtn").style.pointerEvents="none";
+          addClass("addBtn","disableClass");
+          document.getElementById("simulateBtn").style.pointerEvents="none";
+          addClass("simulateBtn","disableClass");
+          document.getElementById("resetBtn").style.pointerEvents="none";
+          addClass("resetBtn","disableClass");
+
+        }
+
+        function simulate()
+        {
+          disable();
+          for(var i=1;i<13;i++)
+          {
+            removeClass(i,"sorted");
+          }
+          logIndex=-1;
+          bubbleSort(aIndex+1);
+
+          startTime=0;
+          for(var i=0;i<=logIndex;i++)
+          {
+            if(tLog[i][0]==0)continue;
+
+             animate(tLog[i][0],tLog[i][1],tLog[i][2],startTime,tLog[i][3]);
+             startTime+=(transitionTime+50);
+          }
+
+          setTimeout(function(){enable();},startTime);
+        }
+
+        function reset()
+        {
+          for(var i=1;i<13;i++)
+          {
+            removeClass(i,"notEmpty");
+            removeClass(i,"sorted");
+            document.getElementById("v"+i).innerHTML="";
+            translate(i,0,0);
+            idTable[i]=i;
+            idMovementX[i]=0;
+            idMovementY[i]=0;
+
+          }
+
+          aIndex=0;
+          setAndAnimate(13);
+          setAndAnimate(4);
+
+        }
+
+        init();
+
+
+
+
+
+
+    </script>
+  </body>
+  </html>
