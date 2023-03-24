@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Typing Test</title>
+    <style>
+    body{
+    	background-color:#ebebe0;
+    }
+    #text{
+     font-family:verdana;
+     font-size:18px;
+     
+    }
+    #input{
+     font-family:verdana;
+     font-size:20px;
+    }
+    button{
+     color:blue;
+     margin:2px;
+     padding:2px;
+     font-size:20px;
+    }
+    </style>
+  </head>
+  <body>
+    <h3>Typing Test</h3>
+    <p>Sample paragraph  <span id="pLength"></span> </p>
+    
+    <textarea id="text" rows="8" cols="100">
+  Money stashed abroad is not always the money which has been evaded form payment of taxes. Drugh lords terrorists groups gangsters all over the world along with International Syndicate also keep their money in safe haven, where they can lay their hands on it in time of need for their operational purposes. There is no mechanism with the Government to determine and say with cent surely that the money hoarded abroad is only the one that has been evaded from the taxes and not the other crime linked cash. The Revenue Department and other agencies of the Government like the RAW and State Trading Organisations have their offices abroad. There is no common mandate to them to report any suspicious transactions by the Indian either visiting or staying abroad.
+	    The stark truth is that the black money is the result of high level corruption prevailing in our country. The schemes meant for the poor, even as per  the Government reports are not implemented and the money siphoned off. Even laws permit every criminal whether in jail or on bail to hide their names and crimes and create false alibis. But, here the Government is creating alibis for those people whose names have been received and disclosed as the persons who are having cash which is got illegally and is not from any known legal sources. They have stashed cash in safe tax heavens abroad. Even the supreme Court, the Apex Court of India, says that nothing moves without bribery in India.
+	    A good and alert cop even on a tourist visa can spot Indians about and visiting these safe tax heavens or Swiss banks. The rest of the job of tracing the flight of black money form India can be done locally provided the Government has the will. So far, the Government has been making excuses, some tenable and some untenable. Unfortunately, no Government irrespective of the party in power has taken even a genuine small step to stop the generation and flight of black money from India, forget about getting the black money back.
+  </textarea><br>
+   
+    <button onclick="processText()">Remove extra spaces from input</button>
+    <hr><br>
+    <span>Time remaining: <span id="timer"></span> minutes</span>
+    <button id="timerButton" onclick="startClock()">Start </button>
+    <br>
+   
+    <textarea id="input" rows="10" cols="90"></textarea><br>
+    <button onclick="check()">Evaluate</button>
+    
+    <h3>SUMMARY</h3>
+    <table id="summaryTable">
+  <tbody>
+    <tr>
+      <td></td>
+      <td></td>
+      
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+     
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+     
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+     
+    </tr>
+    
+  </tbody>
+</table>
+
+    
+    <script>
+     
+
+      function minEditDistance(str1, str2,len) {
+        const m = len;
+        const n = str2.length;
+        const dp = [];
+        for (let i = 0; i <= m; i++) {
+          dp[i] = [];
+          for (let j = 0; j <= n; j++) {
+            if (i === 0) {
+              dp[i][j] = j;
+            } else if (j === 0) {
+              dp[i][j] = i;
+            } else if (str1.charAt(i - 1) === str2.charAt(j - 1)) {
+              dp[i][j] = dp[i - 1][j - 1];
+            } else {
+              dp[i][j] = 1 + Math.min(dp[i][j - 1], // Insert
+                dp[i - 1][j], // Remove
+                dp[i - 1][j - 1] // Replace
+              );
+            }
+          }
+        }
+        return dp[m][n];
+      }
+
+      function paragraphLength() {
+       var textArea = document.querySelector("#text");
+       const str=textArea.value;
+        const charCount = str.length;
+        console.log(charCount); // Output: 23
+        var length = document.querySelector("#pLength");
+        length.textContent = " | Length is" + charCount + " characters.";
+      }
+
+      function processText() {
+        var textArea = document.querySelector("#text");
+        var str = textArea.value;
+     
+        const trimmedStr = str.replace(/\s+/g, " ").trim();
+        
+        textArea.value = trimmedStr;
+        paragraphLength();
+        textArea.disabled = true;
+      }
+
+      function check() {
+        var text = document.getElementById("text").value;
+        var input = document.getElementById("input").value;
+        const len=input.length;
+        
+        var distance=20000;
+        for(var i=len-50;i<=(len+50);i++){
+        
+          if(i<0)continue;
+        
+          var temp=minEditDistance(text, input,i);
+          if(temp<distance)distance=temp;
+        }
+       
+        const keystrokes=input.length;
+        const paraLength=text.length;
+        const percentageError= (distance/keystrokes)*100.0;
+        const trimmedPercentage = percentageError.toFixed(2);
+      
+        const correctKeystrokes=keystrokes-distance;
+        
+        const str="ks"+keystrokes+",errper:"+trimmedPercentage+",err:"+distance;
+       
+        
+        
+        const table = document.querySelector("#summaryTable");
+
+	// Change the data in the first row
+	const firstRow = table.rows[0];
+	firstRow.cells[0].textContent = "Paragraph length";
+	firstRow.cells[1].textContent = paraLength;
+	
+	
+	const secondRow = table.rows[1];
+	secondRow.cells[0].textContent = "Keystrokes";
+	secondRow.cells[1].textContent = keystrokes;
+	
+	const thirdRow = table.rows[2];
+	thirdRow.cells[0].textContent = "Error percentage";
+	thirdRow.cells[1].textContent = trimmedPercentage +"%";
+	
+	const fourthRow = table.rows[3];
+	fourthRow.cells[0].textContent = "Erros made";
+	fourthRow.cells[1].textContent = distance;
+	
+	
+	
+
+	// Scroll the page to the element
+	table.scrollIntoView({ 
+	  behavior: 'smooth' 
+	});
+	
+	
+	
+
+      }
+
+      function startTimer(duration, display) {
+        let timer = duration,
+          minutes, seconds;
+        setInterval(function() {
+          minutes = parseInt(timer / 60, 10);
+          seconds = parseInt(timer % 60, 10);
+          minutes = minutes < 10 ? "0" + minutes : minutes;
+          seconds = seconds < 10 ? "0" + seconds : seconds;
+          display.textContent = minutes + ":" + seconds;
+          if (--timer < 0) {
+            timer = duration;
+          }
+        }, 1000);
+      }
+
+      function startClock() {
+        
+        const textArea = document.querySelector("#input");
+        textArea.disabled = false;
+        const button = document.querySelector("#timerButton");
+        button.disabled = true;
+        const duration = 15 * 60; //15 minutes
+        const display = document.querySelector("#timer");
+        startTimer(duration, display);
+        
+      }
+      
+       function init() {
+        paragraphLength();
+        const textArea = document.querySelector("#input");
+        textArea.disabled = true;
+        
+        const display = document.querySelector("#timer");
+        display.textContent="15:00";
+      }
+      
+      init();
+    </script>
+  </body>
+</html>
