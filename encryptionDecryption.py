@@ -37,10 +37,10 @@ def myCode(mykey,offset):
 		magicList.append(index+offset)
 		#print(index)
 	
-	num=0
+	num=""
 	for key in mykey:
 		index=keys.index(key)
-		num=num*100+magicList[index]
+		num+=str(magicList[index])
 
 	print(num)
 
@@ -58,8 +58,10 @@ def myDecode(num):
 
 
 #keyGeneration()
-myCode("abc",12)
-myDecode("565879")
+offset=input()
+myCode("abc",int(offset))
+eKey=input()
+myDecode(str(eKey))
 
 
-#comment to create space
+#just space comments
