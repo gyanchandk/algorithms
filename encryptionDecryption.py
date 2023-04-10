@@ -3,7 +3,8 @@ magicList=[]
 keys=[]
 characters="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*()1234567890+-/=<>[]{}"
 #newKey="v&8{BMXit^7]JLWhsu6[IKVgr#%>HSUfq@$5GRTep!24<Qbdoz13=Facny)+/EPkmx(0-DOZJlw*9}CNYj"
-newKey="v&8{BMXitJlw*9}CNYj^7]JLWhsu6[IKVgr#%>HSUfq@$5GRTep!24<Qbdoz13=Facny)+/EPkmx(0-DOZ"
+#newKey="v&8{BMXitJlw*9}CNYj^7]JLWhsu6[IKVgr#%>HSUfq@$5GRTep!24<Qbdoz13=Facny)+/EPkmx(0-DOZ"
+newKey=input()
 
 
 def keyGeneration():
