@@ -6,7 +6,6 @@ characters="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*()123456
 newKey="v&8{BMXitJlw*9}CNYj^7]JLWhsu6[IKVgr#%>HSUfq@$5GRTep!24<Qbdoz13=Facny)+/EPkmx(0-DOZ"
 
 
-
 def keyGeneration():
 	f = open("ms2.txt", "r")
 	for line in f:
@@ -42,38 +41,25 @@ def myCode(mykey,offset):
 	for key in mykey:
 		index=keys.index(key)
 		num=num*100+magicList[index]
-	
-	#print(magicList)
+
 	print(num)
-	
-	
-		
+
 
 
 def myDecode(num):
+	n=2
+	chunks = [num[i:i+n] for i in range(0, len(num), n)]
 	code=""
-	while num>0:
-		r=num%100
-		num=int(num/100)
-		index=magicList.index(r)
+	for item in chunks:
+		index=magicList.index(int(item))
 		code+=keys[index]
-		#print(r,keys[index])
-		
+	
 	print(code)
-		
-
 
 
 #keyGeneration()
 myCode("abc",12)
-myDecode(565879)
+myDecode("565879")
 
 
-
-
-	
-	
-
-
-
-
+#comment to create space
