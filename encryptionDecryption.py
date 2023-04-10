@@ -54,7 +54,7 @@ def myDecode(num):
 	code=""
 	while num>0:
 		r=num%100
-		num=num/100
+		num=int(num/100)
 		index=magicList.index(r)
 		code+=keys[index]
 		#print(r,keys[index])
@@ -65,8 +65,8 @@ def myDecode(num):
 
 
 #keyGeneration()
-myCode("abbc",12)
-myDecode(5678)
+myCode("abc",12)
+myDecode(565879)
 
 
 
